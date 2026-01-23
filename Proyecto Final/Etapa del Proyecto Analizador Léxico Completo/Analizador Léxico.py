@@ -1,11 +1,5 @@
 """
-Analizador léxico de identificadores enteros y reales
-
-Instrucciones:
-1.- Genera un pequeño analizador léxico, que identifique los 
-siguientes tokens 
-    * identificadores = letra(letra|digito)*
-    * Real = entero.entero+
+Analizador Léxico Completo
 """
 import re
 
