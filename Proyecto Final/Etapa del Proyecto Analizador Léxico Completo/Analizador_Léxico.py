@@ -171,3 +171,17 @@ def analizar_lexico(cadena):
 # EJECUCIÓN DEL PROGRAMA
 entrada = input("Cadena a analizar: ")
 analizar_lexico(entrada)
+
+"""
+EJEMPLO DE CADENA DE EJECUCIÓN:
+
+int x = 10;
+float y = 3.14;
+if (x >= 10 && y != 0.0) {
+    x = x + 1;
+    y = y * 2.5;
+} else {
+    return x;
+}
+
+"""
