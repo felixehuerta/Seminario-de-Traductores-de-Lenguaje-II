@@ -1,6 +1,51 @@
 """
-Analizador Sintáctico para la gramática dada:
-E → E + id | id
+Analizador Sintáctico LR
+
+Este módulo implementa un analizador sintáctico basado en el método
+de parsing LR utilizando una pila y una tabla de análisis.
+
+El analizador recibe como entrada los tokens generados por el
+analizador léxico, los cuales son transformados a un formato
+simplificado para su evaluación sintáctica.
+
+El objetivo es validar expresiones aritméticas simples que siguen
+las siguientes gramáticas:
+
+                    GRAMÁTICAS IMPLEMENTADAS
+---------------------------------------------------------
+| Ejercicio 1:                                      |
+| E → id + id                                       |
+|                                                   |
+| Ejercicio 2:                                      |
+| E → id + E                                        |
+| E → id                                            |
+---------------------------------------------------------
+
+El análisis se realiza mediante una tabla LR que define las acciones
+de desplazamiento (shift), reducción (reduce) y aceptación.
+
+                    TABLA LR UTILIZADA
+---------------------------------------------------------
+| Estado |   id   |   +   |   $   |   E               |
+|--------|--------|-------|-------|-------------------|
+|   0    |  d2    |       |       |   1               |
+|   1    |        |       |  r0   |                   |
+|   2    |        |  d3   |  r2   |                   |
+|   3    |  d2    |       |       |   4               |
+|   4    |        |       |  r1   |                   |
+---------------------------------------------------------
+
+                    SIGNIFICADO DE ACCIONES
+---------------------------------------------------------
+| Acción | Descripción                              |
+|--------|------------------------------------------|
+| d      | Shift (desplazamiento)                   |
+| r      | Reduce (reducción por regla)             |
+| r0     | Aceptación de la cadena                 |
+---------------------------------------------------------
+
+El analizador utiliza una pila donde se almacenan estados y símbolos,
+y realiza acciones según la tabla LR hasta aceptar o rechazar la cadena.
 
 Autor: [ESTRADA HUERTA FÉLIX EDUARDO - 216819883]
 """
