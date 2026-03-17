@@ -56,6 +56,17 @@ PALABRAS RESERVADAS: if, else, while, return, int, float
 | $             | 23    |                   |
 ---------------------------------------------
 
+===============================================================
+NOTA IMPORTANTE:
+
+El analizador léxico ha sido diseñado para retornar los tokens
+sin imprimir resultados directamente en consola.
+
+La visualización de los resultados se delega al archivo main.py,
+permitiendo un mejor control del formato de salida y una separación
+adecuada entre lógica y presentación.
+===============================================================
+
 Autor: [ESTRADA HUERTA FÉLIX EDUARDO - 216819883]
 """
 
