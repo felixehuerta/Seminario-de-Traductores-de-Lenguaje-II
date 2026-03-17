@@ -58,9 +58,9 @@ PALABRAS RESERVADAS: if, else, while, return, int, float
 
 Autor: [ESTRADA HUERTA FÉLIX EDUARDO - 216819883]
 """
+
 import re
 
-# PALABRAS RESERVADAS
 PALABRAS_RESERVADAS = {
     "if": 19,
     "while": 20,
@@ -71,7 +71,6 @@ PALABRAS_RESERVADAS = {
     "void": 4
 }
 
-# ESPECIFICACIÓN DE TOKENS
 TOKENS = [
     ("opIGUALDAD", r"==|!="),
     ("opRELAC", r"<=|>=|<|>"),
@@ -94,7 +93,6 @@ TOKENS = [
     ("ERROR", r".")
 ]
 
-# MAPA DE TIPOS
 TIPOS = {
     "IDENTIFICADOR": 0,
     "ENTERO": 1,
@@ -122,7 +120,6 @@ TIPOS = {
     "$": 23
 }
 
-# FUNCIÓN PRINCIPAL
 def analizar_lexico(cadena):
     posicion = 0
     tokens_encontrados = []
@@ -137,12 +134,10 @@ def analizar_lexico(cadena):
             if match:
                 lexema = match.group(0)
 
-                # Ignorar espacios
                 if tipo == "ESPACIO":
                     posicion = match.end()
                     break
 
-                # Palabras reservadas
                 if tipo == "IDENTIFICADOR" and lexema in PALABRAS_RESERVADAS:
                     tipo_token = lexema.upper()
                     valor_tipo = PALABRAS_RESERVADAS[lexema]
@@ -151,26 +146,20 @@ def analizar_lexico(cadena):
                     valor_tipo = TIPOS.get(tipo, -1)
 
                 if tipo_token == "ERROR":
-                    print(f"ERROR LÉXICO: símbolo no reconocido '{lexema}'")
+                    print(f"ERROR LÉXICO: '{lexema}'")
                 else:
-                    print(f"{lexema:<12} -> {tipo_token:<15} Tipo: {valor_tipo}")
+                    print(f"{lexema:<10} -> {tipo_token}")
 
                 tokens_encontrados.append((lexema, tipo_token, valor_tipo))
                 posicion = match.end()
                 break
 
         if not match:
-            print(f"ERROR LÉXICO en posición {posicion}")
+            print("Error léxico")
             break
 
     tokens_encontrados.append(("$", "$", 23))
-    print("$           -> FIN             Tipo: 23")
-
     return tokens_encontrados
-
-# EJECUCIÓN DEL PROGRAMA
-entrada = input("Cadena a analizar: ")
-analizar_lexico(entrada)
 
 """
 EJEMPLO DE CADENA DE EJECUCIÓN:
