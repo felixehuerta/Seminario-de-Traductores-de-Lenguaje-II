@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+int main(){
+    int alumnos;
+    alumnos = 25;
+    promedio = 89;
+    if (promedio>alumnos){
+        promedio = promedio + alumnos;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
