@@ -2,39 +2,48 @@ class Analisis_Semantico:
     
     def __init__(self, tokens):
         self.tokens = tokens
-        self.i = 0
-        self.variables = set()
-        self.errores = []
+        self.token_index = 0
+        self.errors = []
 
-    def analizar(self):
-        while self.i < len(self.tokens):
-            token = self.tokens[self.i]
+    def analyze(self):
+        while self.token_index < len(self.tokens):
+            if not self.declaracion():
+                self.errors.append(f"Error semántico en línea {self.tokens[self.token_index][2]}: No se pudo analizar la declaración")
+                break
+        if not self.errors:
+            return "Análisis semántico completado sin errores."
+        else:
+            return "\n".join(self.errors)
 
-            if token[0] == "Tipo_dato":
-                self.declarar()
+    def avanzar(self):
+        self.token_index += 1
 
-            elif token[0] == "Identificador":
-                self.usar()
+    def retroceder(self):
+        self.token_index -= 1
 
-            else:
-                self.i += 1
+    def token_actual(self):
+        return self.tokens[self.token_index]
 
-        if not self.errores:
-            return "Analisis semantico correcto."
-        return "\n".join(self.errores)
+    def token_siguiente(self):
+        if self.token_index + 1 < len(self.tokens):
+            return self.tokens[self.token_index + 1]
+        else:
+            return None
 
-    def declarar(self):
-        self.i += 1
-        if self.tokens[self.i][0] == "Identificador":
-            var = self.tokens[self.i][1]
-            self.variables.add(var)
-        self.i += 1
-
-    def usar(self):
-        var = self.tokens[self.i][1]
-        if var not in self.variables:
-            self.errores.append(f"Variable '{var}' no declarada")
-        self.i += 1
+    def declaracion(self):
+        if self.token_actual()[0] == 'Tipo_dato':
+            tipo_dato = self.token_actual()[1]
+            self.avanzar()
+            if self.token_actual()[0] == 'Identificador':
+                variable = self.token_actual()[1]
+                self.avanzar()
+                if self.token_actual()[0] == 'Punto_y_coma':
+                    self.avanzar()
+                    return True
+        return False
 
 def analizar_semantica(tokens):
-    return Analisis_Semantico(tokens).analizar()
+    semantic_analyzer = Analisis_Semantico(tokens)
+    return semantic_analyzer.analyze()
+
+    

@@ -9,11 +9,11 @@ Identificador alumnos 4
 Punto_y_coma ; 4
 Identificador alumnos 5
 Op_asignacion = 5
-Entero 25 5
+Real 25 5
 Punto_y_coma ; 5
 Identificador promedio 6
 Op_asignacion = 6
-Entero 89 6
+Real 89 6
 Punto_y_coma ; 6
 Reservada_if if 7
 Parentesis_apertura ( 7
