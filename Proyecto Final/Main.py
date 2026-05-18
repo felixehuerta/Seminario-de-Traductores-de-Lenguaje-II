@@ -4,6 +4,20 @@ from analisis_lexico import analizar
 from analisis_sintactico import Verificar
 from analisis_semantico import analizar_semantica
 
+def obtener_tokens_desde_archivo():
+
+    tokens = []
+
+    with open("tokens.txt", "r", encoding="utf-8") as file:
+
+        for linea in file:
+
+            partes = linea.strip().split()
+
+            if len(partes) >= 3:
+                tokens.append((partes[0], partes[1], partes[2]))
+
+    return tokens
 
 codigo_fuente = ""          
 lexico_analizado = False    
@@ -63,52 +77,39 @@ def mostrar_analisis_lexico():                  #Boton analisar lexico
         lexico_analizado = True
         mostrar_resultados("Analisis lexico correcto. ")
 
-def mostrar_analisis_sintactico():              #Boton para analisar el sintactico
-   # global lexico_analizado
-    #global sintaxis_analizado
-    #sintaxis_analizado = False
-    #if not lexico_analizado:
-        #mostrar_resultados("Se necesita analisis lexico primero. ")
-        #return
-    #else:
-        #from analisis_sintactico import Verificar
-        #mostrar_resultados(Verificar())
-        #sintaxis_analizado = True
-        
+def mostrar_analisis_sintactico():
+
     global lexico_analizado
     global sintaxis_analizado
+
     sintaxis_analizado = False
-    
-    ventana_sintactica = tk.Toplevel(ventana)
-    ventana_sintactica.title("analisis Sintactico")
+
     if not lexico_analizado:
         mostrar_resultados("Se necesita análisis léxico primero.")
         return
-    else:
-        resultado_sintactico = Verificar()
-        mostrar_resultados(resultado_sintactico)
+
+    resultado_sintactico = Verificar()
+
+    mostrar_resultados(resultado_sintactico)
+
+    if "correcto" in resultado_sintactico.lower():
         sintaxis_analizado = True
-        analizar_semantica()  # Llama)r a la función para realizar el análisis semántico
+        
 
-# Integrar la función mostrar_analisis_sintactico en el botón correspondiente
-boton_analisis_sintactico = tk.Button(text="Análisis Sintáctico", command=mostrar_analisis_sintactico)
+def mostrar_analisis_semantico():
 
-def mostrar_analisis_semantico(resultado):
-    ventana_semantica = tk.Toplevel (ventana)
-    ventana_semantica.title("analisis Semantico")
-    
-    text_resultado_semantico = tk.Text(ventana_semantica, wrap="word", height=10, width=50)
-    text_resultado_semantico.grid(row=0, column=0, padx=10, pady=10)
-    text_resultado_semantico.insert(tk.END, resultado)
-    text_resultado_semantico.config(state=tk.DISABLED)
-    
     global sintaxis_analizado
-    if not sintaxis_analizado:
-        mostrar_resultados("Se necesita el analisis sintactico primero. ")
-        return
-    else:
-        mostrar_resultados("En proceso. ")
 
+    if not sintaxis_analizado:
+        mostrar_resultados("Se necesita el analisis sintactico primero.")
+        return
+
+    tokens = obtener_tokens_desde_archivo()
+
+    resultado = analizar_semantica(tokens)
+
+    mostrar_resultados(resultado)
+    
 #Interfaz grafica
 ventana = tk.Tk()
 ventana.title("Analizador lexico y sintactico")
@@ -150,7 +151,11 @@ boton_analisis_sintactico = tk.Button(ventana, text="Analisis Sintactico", comma
 boton_analisis_sintactico.grid(row=3, column=0, columnspan=2, pady=10, padx=10)
 boton_analisis_sintactico.config(bg="steel blue")
 # Botón para hacer el analisis semantico
-boton_analisis_semantico = tk.Button(ventana, text="Analisis Semantico", command=lambda: mostrar_analisis_semantico())
+boton_analisis_semantico = tk.Button(
+    ventana,
+    text="Analisis Semantico",
+    command=mostrar_analisis_semantico
+)
 boton_analisis_semantico.grid(row=3, column=1, pady=10, padx=10)
 boton_analisis_semantico.config(bg="steel blue")
 # Ejecutar el bucle principal de la ventana

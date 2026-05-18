@@ -84,8 +84,8 @@ class manageTokens: #CLASE AUXILIAR PARA DEVOLVER TOKENS DESDE EL ARCHIVO DE SAL
 
 #IMPLEMENTACION DE LAS REGLAS DE PRODUCCION, SE ANALIZAN LAS SECUENCIAS DE TOKENS 
 
-t = manageTokens()
 mensaje = ""
+t = None
 
 
 def VALOR():        #RECONOCE VARIABLES Y NUMEROS
@@ -149,15 +149,34 @@ def ASIGNACION():   #RECONOCE ASIGNACIONES DE UN VALOR A UNA VARIABLE O DE UNA V
         t.retroceder(2)
     return False
 
-def DECLARACION():  #RECONOCE DECLARACIONES DE VARIABLES SIMPLES O CON UNA OPERACION
+def DECLARACION():
+
     if t.es_actual("Tipo_dato"):
+
         t.avanzar()
-        if t.es_actual("Identificador") and t.es_siguiente("Punto_y_coma"):
-            t.avanzar(2)
-            return True
-        elif ASIGNACION():
-            return True
-        t.retroceder()
+
+        if t.es_actual("Identificador"):
+
+            t.avanzar()
+
+            # Declaración simple
+            if t.es_actual("Punto_y_coma"):
+                t.avanzar()
+                return True
+
+            # Declaración con asignación
+            elif t.es_actual("Op_asignacion"):
+
+                t.avanzar()
+
+                if EXPRESION():
+
+                    if t.es_actual("Punto_y_coma"):
+                        t.avanzar()
+                        return True
+
+        return False
+
     return False
 
 def PARAMETROS():   #SOLO CONSIDERA QUE SI HAYA PARAMETROS, POR PROBAR
@@ -203,6 +222,7 @@ def BLOQUE():       #IMPORTANTE: RECONOCE BLOQUES DE CODIGO -> {instrucciones}
     llaves=0        #verificar que las llaves esten correctamente anidadas
 
     if t.es_actual("Llave_apertura") and t.es_siguiente("Llave_cierre"):
+        t.avanzar(2)
         return True
     
     elif t.es_actual("Llave_apertura") and not t.es_siguiente("Llave_cierre"):
@@ -288,13 +308,20 @@ def FUNCION():
     return False
 
 
-def Verificar(): #FUNCION PRINCIPAL, EMPLEA LAS OTRAS FUNCIONES PARA VERIFICAR QUE EL CODIGO PRINCIPALK SEA CORRECTO
+def Verificar():
+
     global mensaje
+    global t
+
+    t = manageTokens()
+
     mensaje = "Analisis sintactico correcto."
-    while(True):
+
+    while True:
+
         correcto = False
 
-        if t.actual()=="":
+        if t.actual() == "":
             break
 
         if ENCABEZADO():
@@ -303,8 +330,19 @@ def Verificar(): #FUNCION PRINCIPAL, EMPLEA LAS OTRAS FUNCIONES PARA VERIFICAR Q
         elif FUNCION():
             correcto = True
 
+        elif DECLARACION():
+            correcto = True
+
+        elif ASIGNACION():
+            correcto = True
+
         if not correcto:
-            mensaje = "Error en la linea " + t.linea_token_actual() + ", " + t.lexema_actual()
+            mensaje = (
+                "Error en la linea "
+                + t.linea_token_actual()
+                + ", token inesperado: "
+                + t.lexema_actual()
+            )
             break
 
     return mensaje

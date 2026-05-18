@@ -2,12 +2,15 @@
 
 int main(){
     int alumnos;
+    int omedio;
+
     alumnos = 25;
-    8promedio = 89;
+    promedio = 89;
     if (promedio>alumnos){
-        promedio = promedio + alumnos;
+        promedio = promedio, alumnos;
     }
 }
+
 
 
 
